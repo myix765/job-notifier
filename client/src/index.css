@@ -161,10 +161,15 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-color: #fcfcfc;
+    background-color: #f5f5f5;
   }
 
   h1 {
     @apply text-4xl font-bold;
   }
+}
+
+@utility bg-gradient {
+  background: rgba(215, 129, 107, 1.0);
+  background: radial-gradient(at right top, rgba(215, 129, 107, 1.0), rgba(22, 152, 77, 0.0));
 }
