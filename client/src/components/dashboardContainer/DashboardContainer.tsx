@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import Search from "@/components/ui/search";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,8 +7,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import FilterBadge from "../ui/filterBadge";
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Search from "@/components/ui/search";
+import FilterBadge from "@/components/dashboardContainer/components/filterBadge";
+import EditAlertForm from "./components/forms/EditAlertForm";
 
 const DashboardContainer = () => {
   const [query, setQuery] = useState("");
@@ -18,17 +38,17 @@ const DashboardContainer = () => {
     {
       id: 1,
       position: "Software Engineer",
-      filters: ["United States", "Posted 24 hours ago"]
+      filters: [{ type: "location", value: "United States" }, { type: "time posted", value: "Posted 24 hours ago" }]
     },
     {
       id: 2,
       position: "Data Scientist",
-      filters: ["Remote", "Posted 3 days ago"]
+      filters: [{ type: "location", value: "Remote" }, { type: "time posted", value: "Posted 3 days ago" }]
     },
     {
       id: 3,
       position: "Product Manager",
-      filters: ["Canada", "Posted 1 week ago"]
+      filters: [{ type: "location", value: "Canada" }, { type: "time posted", value: "Posted 1 week ago" }]
     },
   ];
 
@@ -41,7 +61,7 @@ const DashboardContainer = () => {
   return (
     <>
       <div className="rounded-lg py-4 px-[1.125rem] shadow-[0px_1px_10px_1px_rgba(0,0,0,0.05)]">
-        <div className="flex row justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
           <Search
             value={query}
             placeholder="Search alerts..."
@@ -61,12 +81,44 @@ const DashboardContainer = () => {
               <TableRow key={alert.id}>
                 <TableCell>{alert.position}</TableCell>
                 <TableCell className="inline-flex gap-2">
-                  {alert.filters.map(filter =>
-                    <FilterBadge filter={filter} type="location" />
+                  {alert.filters.map((filter, i) =>
+                    <FilterBadge key={i} filter={filter} type="location" />
                   )}
                 </TableCell>
-                <TableCell className="text-right">
-                  <Button variant="secondary">Edit</Button>
+                <TableCell>
+                  <div className="flex gap-2 justify-end">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="secondary">Edit</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Edit alert for {alert.position}</DialogTitle>
+                          <DialogDescription className="mb-2">
+                            Modify the position query and filters for this alert.
+                          </DialogDescription>
+                          <EditAlertForm alert={alert} />
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive">Delete</Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Confirm deletion</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this alert for {alert.position}? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction>Confirm</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
