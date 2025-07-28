@@ -30,6 +30,7 @@ import {
 import Search from "@/components/ui/search";
 import FilterBadge from "@/components/dashboardContainer/components/filterBadge";
 import EditAlertForm from "./components/forms/EditAlertForm";
+import AddAlertForm from "./components/forms/AddAlertForm";
 
 const DashboardContainer = () => {
   const [query, setQuery] = useState("");
@@ -67,12 +68,25 @@ const DashboardContainer = () => {
             placeholder="Search alerts..."
             onSearch={(value) => setQuery(value)}
           />
-          <Button>New</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>New</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Alert</DialogTitle>
+                <DialogDescription className="mb-2">
+                  Create a new alert by specifying the position and filters.
+                </DialogDescription>
+                <AddAlertForm />
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-md">Position</TableHead>
+              <TableHead className="w-xs">Position</TableHead>
               <TableHead>Filters</TableHead>
             </TableRow>
           </TableHeader>
@@ -80,7 +94,7 @@ const DashboardContainer = () => {
             {filteredAlerts.map((alert) => (
               <TableRow key={alert.id}>
                 <TableCell>{alert.position}</TableCell>
-                <TableCell className="inline-flex gap-2">
+                <TableCell className="inline-flex gap-2 flex-wrap">
                   {alert.filters.map((filter, i) =>
                     <FilterBadge key={i} filter={filter} type="location" />
                   )}
