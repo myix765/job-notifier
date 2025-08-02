@@ -1,6 +1,6 @@
 export interface Alert {
     id: number;
     position: string;
-    notifyFreq: number;
+    alertFreq: number;
     filters: { type: string; value: string }[];
 }

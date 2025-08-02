@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const alertSchema = z.object({
   position: z.string().nonempty("Position is required"),
-  notifyFreq: z.number().min(1, "Scrape frequency must be at least 1 hour"),
+  alertFreq: z.number().min(1, "Scrape frequency must be at least 1 hour"),
   filters: z.array(
     z.object({
       type: z.string().nonempty("Type is required"),

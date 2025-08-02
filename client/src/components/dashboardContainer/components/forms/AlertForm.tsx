@@ -38,7 +38,7 @@ const AlertForm = ({
     resolver: zodResolver(alertSchema),
     defaultValues: {
       position: initAlert.position,
-      notifyFreq: initAlert.notifyFreq,
+      alertFreq: initAlert.alertFreq,
       filters: initAlert.filters,
     },
   });
@@ -61,7 +61,7 @@ const AlertForm = ({
         />
         <FormField
           control={form.control}
-          name="notifyFreq"
+          name="alertFreq"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Notification Frequency (in hours)</FormLabel>
