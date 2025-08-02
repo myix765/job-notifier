@@ -38,6 +38,7 @@ const AlertForm = ({
     resolver: zodResolver(alertSchema),
     defaultValues: {
       position: initAlert.position,
+      notifyFreq: initAlert.notifyFreq,
       filters: initAlert.filters,
     },
   });
@@ -53,6 +54,23 @@ const AlertForm = ({
               <FormLabel>Position</FormLabel>
               <FormControl>
                 <Input placeholder="Position" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="notifyFreq"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notification Frequency (in hours)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="Number of hours"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

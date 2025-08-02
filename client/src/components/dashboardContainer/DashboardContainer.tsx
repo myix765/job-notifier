@@ -39,16 +39,19 @@ const DashboardContainer = () => {
     {
       id: 1,
       position: "Software Engineer",
+      notifyFreq: 24,
       filters: [{ type: "location", value: "United States" }, { type: "time posted", value: "Posted 24 hours ago" }]
     },
     {
       id: 2,
       position: "Data Scientist",
+      notifyFreq: 12,
       filters: [{ type: "location", value: "Remote" }, { type: "time posted", value: "Posted 3 days ago" }]
     },
     {
       id: 3,
       position: "Product Manager",
+      notifyFreq: 6,
       filters: [{ type: "location", value: "Canada" }, { type: "time posted", value: "Posted 1 week ago" }]
     },
   ];

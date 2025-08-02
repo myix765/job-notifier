@@ -11,6 +11,7 @@ const AddAlertForm = () => {
   const newAlert: Alert = {
     id: NaN,
     position: "",
+    notifyFreq: 1,
     filters: [
       { type: "", value: "" },
     ],
