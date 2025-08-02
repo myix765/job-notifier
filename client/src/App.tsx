@@ -4,7 +4,7 @@ import Router from '@/routes'
 function App() {
   return (
     <>
-      <div className='m-4 sm:m-6 md:m-8 lg:m-10 xl:m-12 2xl:m-14 font-poppins'>
+      <div className='flex items-center justify-center min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14 font-poppins'>
         <Router />
       </div>
     </>

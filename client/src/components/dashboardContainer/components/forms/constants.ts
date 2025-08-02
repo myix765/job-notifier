@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const alertSchema = z.object({
   position: z.string().nonempty("Position is required"),

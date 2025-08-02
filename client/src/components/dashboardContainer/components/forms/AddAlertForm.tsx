@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 import { alertSchema } from "./constants";
 import type { Alert } from "@/components/dashboardContainer/types";
 import AlertForm from "@/components/dashboardContainer/components/forms/AlertForm";
