@@ -16,7 +16,7 @@ const Search = ({ onSearch, value, placeholder }: SearchProps) => {
           value={value}
           onChange={(e) => onSearch(e.target.value)}
           className="bg-transparent outline-none w-full" />
-        <button className="cursor-pointer align-middle" onClick={() => console.log("hi")}>
+        <button className="cursor-pointer align-middle" onClick={() => console.log("search")}>
           <LucideSearch className="text-gray-500" size={20} />
         </button>
       </div>

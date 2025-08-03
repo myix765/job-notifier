@@ -1,6 +1,11 @@
+import { useContext } from "react";
+import { UserContext } from "@/contexts/UserContext";
 import DashboardContainer from "@/components/dashboardContainer/DashboardContainer";
 
 const Dashboard = () => {
+  const { user } = useContext(UserContext);
+  console.log(JSON.stringify(user, null, 2));
+
   return (
     <>
       <div className="w-full self-start">
