@@ -151,7 +151,13 @@ const AlertForm = ({
             </div>
           )}
         />
-        <Button type="submit" className="mt-1">{submitLabel}</Button>
+        <div className="flex gap-2 mt-1">
+          <Button type="submit">{submitLabel}</Button>
+          <Button
+            variant="secondary"
+            type="reset"
+            onClick={() => form.reset()}>Reset</Button>
+        </div>
       </form>
     </Form>
   )
