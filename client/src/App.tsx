@@ -4,6 +4,7 @@ import { UserContext } from '@/contexts/UserContext';
 import Router from '@/routes'
 import { supabase } from '@/lib/supabaseClient';
 import type { User } from '@supabase/supabase-js';
+import { toast } from "sonner";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -11,6 +12,19 @@ function App() {
   useEffect(() => {
     const fetchSession = async () => {
       const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        toast.error("Error finding account", {
+          description: error.message,
+          action: {
+            label: "Dismiss",
+            onClick: () => { },
+          },
+        });
+        setUser(null);
+        return;
+      }
+
       setUser(data?.session?.user ?? null);
     };
 

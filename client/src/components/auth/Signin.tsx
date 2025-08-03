@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 
 const Signin = () => {
@@ -39,7 +40,13 @@ const Signin = () => {
     });
 
     if (error) {
-      console.error("Error signing in:", error.message);
+      toast.error("Error signing in", {
+        description: error.message,
+        action: {
+          label: "Dismiss",
+          onClick: () => { },
+        },
+      })
     }
   };
 
