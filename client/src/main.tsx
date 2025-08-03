@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')!).render(
       <App />
       <Toaster
         position='top-center'
-        duration={4000}
+        duration={3000}
         richColors
         theme='light'
         toastOptions={{

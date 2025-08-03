@@ -18,6 +18,7 @@ import {
 import Search from "@/components/ui/search";
 import AddAlertForm from "./components/forms/AddAlertForm";
 import AlertRow from "@/components/dashboardContainer/AlertRow";
+import { supabase } from "@/lib/supabaseClient";
 
 const DashboardContainer = () => {
   const [query, setQuery] = useState("");
@@ -58,6 +59,7 @@ const DashboardContainer = () => {
             placeholder="Search alerts..."
             onSearch={(value) => setQuery(value)}
           />
+          <Button onClick={async () => { await supabase.auth.signOut() }}>Logout</Button>
           <Dialog>
             <DialogTrigger asChild>
               <Button>New</Button>
