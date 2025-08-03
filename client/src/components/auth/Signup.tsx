@@ -52,7 +52,7 @@ const Signup = () => {
   }
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Sign up for a new account</CardTitle>
         <CardDescription>
@@ -127,7 +127,7 @@ const Signup = () => {
             </div>
             <Button
               type="submit"
-              className="w-full mt-6"
+              className="mt-6"
               disabled={form.formState.isSubmitting}
             >
               Sign Up

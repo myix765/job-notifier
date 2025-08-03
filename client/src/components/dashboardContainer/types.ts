@@ -4,3 +4,7 @@ export interface Alert {
     alertFreq: number;
     filters: { type: string; value: string }[];
 }
+
+export interface DashboardContainerProps {
+    alerts: Alert[];
+}

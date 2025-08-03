@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 export const signUpSchema = z.object({
   email: z.string().nonempty("Email is required"),
@@ -16,4 +17,16 @@ export const signUpSchema = z.object({
 export const signInSchema = z.object({
   email: z.string().nonempty("Email is required"),
   password: z.string().nonempty("Password is required"),
+});
+
+export const addPhoneSchema = z.object({
+  phone: z
+    .string()
+    .nonempty("Phone number is required")
+    .refine((val) => {
+      const phoneNumber = parsePhoneNumberFromString(val, "US");
+      return phoneNumber?.isValid() ?? false;
+    }, {
+      message: "Invalid phone number",
+    }),
 });

@@ -51,7 +51,7 @@ const Signin = () => {
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Sign in to your account</CardTitle>
         <CardDescription>
@@ -113,7 +113,7 @@ const Signin = () => {
             </div>
             <Button
               type="submit"
-              className="w-full mt-6">
+              className="mt-6">
               Sign in
             </Button>
           </form>

@@ -19,30 +19,31 @@ import Search from "@/components/ui/search";
 import AddAlertForm from "./components/forms/AddAlertForm";
 import AlertRow from "@/components/dashboardContainer/AlertRow";
 import { supabase } from "@/lib/supabaseClient";
+import type { DashboardContainerProps } from "./types";
 
-const DashboardContainer = () => {
+const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
   const [query, setQuery] = useState("");
 
-  const alerts = [
-    {
-      id: 1,
-      position: "Software Engineer",
-      alertFreq: 24,
-      filters: [{ type: "location", value: "United States" }, { type: "time posted", value: "Posted 24 hours ago" }]
-    },
-    {
-      id: 2,
-      position: "Data Scientist",
-      alertFreq: 12,
-      filters: [{ type: "location", value: "Remote" }, { type: "time posted", value: "Posted 3 days ago" }]
-    },
-    {
-      id: 3,
-      position: "Product Manager",
-      alertFreq: 6,
-      filters: [{ type: "location", value: "Canada" }, { type: "time posted", value: "Posted 1 week ago" }]
-    },
-  ];
+  // const alerts = [
+  //   {
+  //     id: 1,
+  //     position: "Software Engineer",
+  //     alertFreq: 24,
+  //     filters: [{ type: "location", value: "United States" }, { type: "time posted", value: "Posted 24 hours ago" }]
+  //   },
+  //   {
+  //     id: 2,
+  //     position: "Data Scientist",
+  //     alertFreq: 12,
+  //     filters: [{ type: "location", value: "Remote" }, { type: "time posted", value: "Posted 3 days ago" }]
+  //   },
+  //   {
+  //     id: 3,
+  //     position: "Product Manager",
+  //     alertFreq: 6,
+  //     filters: [{ type: "location", value: "Canada" }, { type: "time posted", value: "Posted 1 week ago" }]
+  //   },
+  // ];
 
   const filteredAlerts = useMemo(() => {
     return alerts.filter(alert =>

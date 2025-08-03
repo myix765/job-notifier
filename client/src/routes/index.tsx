@@ -2,16 +2,17 @@ import { Routes, Route } from 'react-router';
 import Dashboard from '@/pages/Dashboard';
 import Signin from '@/components/auth/Signin';
 import Signup from '@/components/auth/Signup';
+import AddPhone from '@/components/auth/AddPhone';
 import PageNotFound from '@/pages/PageNotFound';
-import { paths } from '@/routes/constants';
 
 const Router = () => {
   return (
     <Routes>
-      <Route path={paths.DASHBOARD} element={<Dashboard />} />
-      <Route path={paths.SIGNIN} element={<Signin />} />
-      <Route path={paths.SIGNUP} element={<Signup />} />
-      <Route path={paths.PAGE_NOT_FOUND} element={<PageNotFound />} />
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/signin" element={<Signin />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/add-phone" element={<AddPhone />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   )
 }

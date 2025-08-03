@@ -1,6 +1,9 @@
-export const paths = {
-  DASHBOARD: '/',
-  SIGNIN: '/signin',
-  SIGNUP: '/signup',
-  PAGE_NOT_FOUND: '*',
-} as const;
+export const protectedRoutes = {
+    HOME: "/",
+};
+
+export const authRoutes = {
+    SIGNIN: "/signin",
+    SIGNUP: "/signup",
+    ADD_PHONE: "/add-phone",
+};

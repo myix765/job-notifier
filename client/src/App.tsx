@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 import type { User } from '@supabase/supabase-js';
 import { toast } from "sonner";
 import { useNavigate, useLocation } from 'react-router';
-import { paths } from '@/routes/constants';
+import { protectedRoutes, authRoutes } from '@/routes/constants';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -30,12 +30,11 @@ function App() {
         return;
       }
 
-      if (!data?.session && (Object.values(paths) as string[]).includes(location.pathname)) {
+      if (!data?.session && Object.values(protectedRoutes).includes(location.pathname)) {
         navigate('/signin');
         setLoading(false);
         return;
       }
-
       setUser(data?.session?.user ?? null);
       setLoading(false);
     };
@@ -43,17 +42,17 @@ function App() {
     fetchSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if ((Object.values(paths) as string[]).includes(location.pathname)) {
-        if (event === 'SIGNED_IN') {
-          console.log('User signed in:', session?.user);
-          setUser(session?.user ?? null);
+      if (event === 'SIGNED_IN') {
+        console.log('User signed in:', session?.user);
+        setUser(session?.user ?? null);
+        if (Object.values(authRoutes).includes(location.pathname)) {
           navigate('/');
-
-        } else if (event === 'SIGNED_OUT') {
-          console.log('User signed out');
-          setUser(null);
-          navigate('/signin');
         }
+
+      } else if (event === 'SIGNED_OUT') {
+        console.log('User signed out');
+        setUser(null);
+        navigate('/signin');
       }
     });
 
