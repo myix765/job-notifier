@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router';
 import Dashboard from '@/pages/Dashboard';
-import Signin from '@/components/auth/Signin';
-import Signup from '@/components/auth/Signup';
-import AddPhone from '@/components/auth/AddPhone';
+import Signin from '@/pages/auth/Signin';
+import Signup from '@/pages/auth/Signup';
+import AddPhone from '@/pages/auth/AddPhone';
 import PageNotFound from '@/pages/PageNotFound';
 
 const Router = () => {
