@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
 
+{/* display toast if navigating from private route */ }
 const PrivateRoutes = () => {
   const { session } = useAuth();
   const location = useLocation();

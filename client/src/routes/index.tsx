@@ -6,6 +6,21 @@ import AddPhone from '@/pages/auth/AddPhone';
 import PageNotFound from '@/pages/PageNotFound';
 import { useAuth } from '@/hooks/useAuth';
 import PrivateRoutes from '@/routes/components/PrivateRoutes';
+import { AUTH_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/constants';
+
+const priv = [
+  { path: PRIVATE_ROUTES.HOME, element: <Dashboard /> },
+]
+
+const auth = [
+  { path: AUTH_ROUTES.SIGNIN, element: <Signin /> },
+  { path: AUTH_ROUTES.SIGNUP, element: <Signup /> },
+  { path: AUTH_ROUTES.ADD_PHONE, element: <AddPhone /> },
+]
+
+const publ = [
+  { path: PUBLIC_ROUTES.PAGE_NOT_FOUND, element: <PageNotFound /> },
+]
 
 const Router = () => {
   const { loading } = useAuth();
@@ -13,12 +28,16 @@ const Router = () => {
   return loading ? <></> : (
     <Routes>
       <Route element={<PrivateRoutes />}>
-        <Route path="/" element={<Dashboard />} />
+        {priv.map(route =>
+          <Route key={route.path} path={route.path} element={route.element} />
+        )}
       </Route>
-      <Route path="/signin" element={<Signin />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/add-phone" element={<AddPhone />} />
-      <Route path="*" element={<PageNotFound />} />
+      {auth.map(route =>
+        <Route key={route.path} path={route.path} element={route.element} />
+      )}
+      {publ.map(route =>
+        <Route key={route.path} path={route.path} element={route.element} />
+      )}
     </Routes>
   )
 }

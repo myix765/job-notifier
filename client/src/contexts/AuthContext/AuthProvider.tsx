@@ -3,6 +3,7 @@ import { AuthContext } from '@/contexts/AuthContext/AuthContext';
 import type { Session } from '@supabase/supabase-js';
 import type { AuthProviderProps } from './types';
 import { useNavigate, useLocation } from 'react-router';
+import { PRIVATE_ROUTES } from '@/routes/constants';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from "sonner";
 
@@ -23,11 +24,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
+        const priv = new Set(Object.values(PRIVATE_ROUTES));
+        if (!priv.has(location.pathname)) return;
         console.log('signed in')
         setSession(session ?? null);
         const origin = location.state?.from?.pathname || '/'; // not sure if this works yet
         navigate(origin);
       } else if (event === 'SIGNED_OUT') {
+        console.log('signed out')
         setSession(null);
         navigate('/signin');
       }
