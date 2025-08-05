@@ -1,16 +1,16 @@
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "@/contexts/UserContext";
+import { AuthContext } from "@/contexts/AuthContext/AuthContext";
 import DashboardContainer from "@/components/dashboardContainer/DashboardContainer";
 import { supabase } from "@/lib/supabaseClient";
 import type { Alert } from "@/components/dashboardContainer/types";
 
 const Dashboard = () => {
-  const { user } = useContext(UserContext);
+  const { session } = useContext(AuthContext);
   const [alerts, setAlerts] = useState<Alert[]>([]);
-  console.log(JSON.stringify(user, null, 2));
 
   useEffect(() => {
     const fetchAlerts = async () => {
+      const user = session?.user;
       if (!user) return;
 
       const res = await supabase
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
     fetchAlerts();
     console.log("Fetched alerts:", alerts);
-  }, [user])
+  }, [session])
 
   return (
     <>

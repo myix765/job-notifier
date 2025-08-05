@@ -23,6 +23,8 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 
+// TODO: trying to sign up with existing email doesn't show error/do anything
+// TODO: because of email confirmation no session is created, need to redirect to confirm email page
 const Signup = () => {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -35,10 +37,11 @@ const Signup = () => {
 
   const handleSignup = async (signUpFormData: z.infer<typeof signUpSchema>) => {
     console.log("Signing up with", signUpFormData);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: signUpFormData.email,
       password: signUpFormData.password,
     });
+    console.log(data);
 
     if (error) {
       toast.error("Error signing up", {
