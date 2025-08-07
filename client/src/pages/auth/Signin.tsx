@@ -20,10 +20,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
-import { toast } from "sonner";
-import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/hooks/useAuth";
 
 const Signin = () => {
+  const { signIn } = useAuth();
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -33,21 +34,8 @@ const Signin = () => {
   });
 
   const handleSignin = async (signInFormData: z.infer<typeof signInSchema>) => {
-    console.log("Signing in with", signInFormData);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: signInFormData.email,
-      password: signInFormData.password,
-    });
-
-    if (error) {
-      toast.error("Error signing in", {
-        description: error.message,
-        action: {
-          label: "Dismiss",
-          onClick: () => { },
-        },
-      })
-    }
+    const { email, password } = signInFormData;
+    await signIn(email, password);
   };
 
   return (

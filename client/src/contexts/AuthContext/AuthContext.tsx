@@ -7,4 +7,5 @@ export const AuthContext = createContext<AuthContextType>({
   signUp: async () => ({ success: false, error: null }),
   signIn: async () => ({ success: false, error: null }),
   signOut: async () => ({ success: false, error: null }),
+  confirmEmail: async () => ({ success: false, error: null }),
 });

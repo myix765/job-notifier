@@ -1,8 +1,10 @@
+import type { FilterTypes } from "@/components/dashboardContainer/constants";
+
 export interface Alert {
     id: number;
     position: string;
     alertFreq: number;
-    filters: { type: string; value: string }[];
+    filters: { type: FilterTypes; value: string }[];
 }
 
 export interface DashboardContainerProps {

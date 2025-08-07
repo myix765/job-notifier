@@ -21,6 +21,8 @@ export interface AuthContextType {
     Promise<{ success: boolean; data?: SignInDataType; error?: AuthError | null }>;
   signOut: () =>
     Promise<{ success: boolean; error: AuthError | null }>;
+  confirmEmail: (email: string) =>
+    Promise<{ success: boolean; error: AuthError | null }>;
 }
 
 export interface AuthProviderProps {

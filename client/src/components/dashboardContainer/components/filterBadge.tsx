@@ -1,8 +1,7 @@
-import type { FilterTypes } from "../constants";
+import type { FilterTypes } from "@/components/dashboardContainer/constants";
 
 interface FilterBadgeProps {
-  filter: { type: string; value: string };
-  type: FilterTypes;
+  filter: { type: FilterTypes; value: string };
 }
 
 const FilterBadge = ({ filter }: FilterBadgeProps) => {

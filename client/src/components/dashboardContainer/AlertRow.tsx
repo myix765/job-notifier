@@ -32,7 +32,7 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
       <TableCell>{alert.position}</TableCell>
       <TableCell className="inline-flex gap-2 flex-wrap">
         {alert.filters.map((filter, i) =>
-          <FilterBadge key={i} filter={filter} type="location" />
+          <FilterBadge key={i} filter={filter} />
         )}
       </TableCell>
       <TableCell>

@@ -20,8 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
-import { toast } from "sonner";
-import { supabase } from "@/lib/supabaseClient";
+import { PRIVATE_ROUTES } from "@/routes/constants";
 
 const AddPhone = () => {
   const form = useForm<z.infer<typeof addPhoneSchema>>({
@@ -33,19 +32,6 @@ const AddPhone = () => {
 
   const handleAddPhone = async (formData: z.infer<typeof addPhoneSchema>) => {
     console.log("Adding phone number:", formData);
-    // const { error } = await supabase.auth.updateUser({
-    //   phone: formData.phone,
-    // });
-
-    // if (error) {
-    //   toast.error("Error adding phone number", {
-    //     description: error.message,
-    //     action: {
-    //       label: "Dismiss",
-    //       onClick: () => { },
-    //     },
-    //   });
-    // }
   }
 
   return (
@@ -75,7 +61,7 @@ const AddPhone = () => {
             <div className="flex gap-2 mt-6">
               <Button type="submit">Add</Button>
               <Button type="button" variant="secondary" asChild>
-                <Link to="/">Skip</Link>
+                <Link to={PRIVATE_ROUTES.DASHBOARD}>Skip</Link>
               </Button>
             </div>
           </form>

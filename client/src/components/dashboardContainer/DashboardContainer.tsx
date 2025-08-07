@@ -18,13 +18,12 @@ import {
 import Search from "@/components/ui/search";
 import AddAlertForm from "./components/forms/AddAlertForm";
 import AlertRow from "@/components/dashboardContainer/AlertRow";
-import { supabase } from "@/lib/supabaseClient";
 import type { DashboardContainerProps } from "./types";
 
 const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
   const [query, setQuery] = useState("");
 
-  // const alerts = [
+  // const fakeAlerts = [
   //   {
   //     id: 1,
   //     position: "Software Engineer",
@@ -60,7 +59,6 @@ const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
             placeholder="Search alerts..."
             onSearch={(value) => setQuery(value)}
           />
-          <Button onClick={async () => { await supabase.auth.signOut() }}>Logout</Button>
           <Dialog>
             <DialogTrigger asChild>
               <Button>New</Button>

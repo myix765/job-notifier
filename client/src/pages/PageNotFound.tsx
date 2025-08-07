@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
+import { PRIVATE_ROUTES } from "@/routes/constants";
 
 const PageNotFound = () => {
   return (
@@ -8,7 +9,7 @@ const PageNotFound = () => {
         <h1 className="text-6xl font-bold">404</h1>
         <p className="mt-4 text-lg">Page Not Found</p>
         <Button className="mt-6" asChild>
-          <Link to="/">Go to Dashboard</Link>
+          <Link to={PRIVATE_ROUTES.DASHBOARD}>Go to Dashboard</Link>
         </Button>
       </div>
     </div>

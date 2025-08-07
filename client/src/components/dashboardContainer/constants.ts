@@ -1,2 +1,2 @@
-export const FILTER_TYPES = ["location", "time posted"] as const;
+export const FILTER_TYPES = ["", "location", "keyword"] as const;
 export type FilterTypes = typeof FILTER_TYPES[number];

@@ -20,12 +20,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
-import { toast } from "sonner";
-import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/hooks/useAuth";
 
 // TODO: trying to sign up with existing email doesn't show error/do anything
 // TODO: because of email confirmation no session is created, need to redirect to confirm email page
 const Signup = () => {
+  const { signUp } = useAuth();
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -36,23 +37,9 @@ const Signup = () => {
   });
 
   const handleSignup = async (signUpFormData: z.infer<typeof signUpSchema>) => {
-    console.log("Signing up with", signUpFormData);
-    const { data, error } = await supabase.auth.signUp({
-      email: signUpFormData.email,
-      password: signUpFormData.password,
-    });
-    console.log(data);
-
-    if (error) {
-      toast.error("Error signing up", {
-        description: error.message,
-        action: {
-          label: "Dismiss",
-          onClick: () => { },
-        },
-      })
-    }
-  }
+    const { email, password } = signUpFormData;
+    await signUp(email, password);
+  };
 
   return (
     <Card className="w-full max-w-md">
