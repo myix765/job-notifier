@@ -53,10 +53,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (error) {
         showErrorToast("Error signing up", error.message);
+        return { success: false, error };
+      } else {
+        navigate('/confirm-email', { state: email });
+        return { success: true, data };
       }
-
-      navigate('/confirm-email', { state: email });
-      return { success: true, data };
     } catch (err) {
       console.error("Unexpected error during signup:", err);
       showErrorToast("Unexpected error during sign up");
