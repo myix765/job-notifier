@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { alertSchema } from "./constants";
+import { alertFormSchema } from "./constants";
 import type { Alert } from "@/components/dashboardContainer/types";
 import AlertForm from "@/components/dashboardContainer/components/forms/AlertForm";
 
@@ -8,7 +8,7 @@ interface EditAlertFormProps {
 }
 
 const EditAlertForm = ({ alert }: EditAlertFormProps) => {
-  const onSubmit = (formData: z.infer<typeof alertSchema>) => {
+  const onSubmit = (formData: z.infer<typeof alertFormSchema>) => {
     console.log("Form submitted:", formData);
   }
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-export const signUpSchema = z.object({
+export const signUpFormSchema = z.object({
   email: z.string().nonempty("Email is required"),
   password: z.string()
     .min(8, "Password must be at least 8 characters")
@@ -14,12 +14,12 @@ export const signUpSchema = z.object({
   path: ["confirmPassword"],
 });
 
-export const signInSchema = z.object({
+export const signInFormSchema = z.object({
   email: z.string().nonempty("Email is required"),
   password: z.string().nonempty("Password is required"),
 });
 
-export const addPhoneSchema = z.object({
+export const addPhoneFormSchema = z.object({
   phone: z
     .string()
     .nonempty("Phone number is required")

@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useToast } from '@/hooks/useToast';
 import type { Alert } from "@/components/dashboardContainer/types";
 
-interface AlertSchema {
+interface alertFormSchema {
   id: string | null;
   user_id: string | null;
   position: string;
@@ -14,13 +14,13 @@ interface AlertSchema {
   created_at: string | null;
 }
 
-type NewAlertSchema = Omit<AlertSchema, "id" | "created_at">;
+type NewalertFormSchema = Omit<alertFormSchema, "id" | "created_at">;
 
 export const useAlerts = () => {
   const { session } = useAuth();
   const { showErrorToast } = useToast();
 
-  const mapAlertToAlertSchema = (alert: Alert, userId: string | null): NewAlertSchema => {
+  const mapAlertToalertFormSchema = (alert: Alert, userId: string | null): NewalertFormSchema => {
     const location = alert.filters.find(f => f.type === "location")?.value ?? null;
     const keywords = alert.filters
       .filter(
@@ -39,7 +39,7 @@ export const useAlerts = () => {
     };
   }
 
-  const mapAlertSchemaToAlert = (alert: AlertSchema): Alert => {
+  const mapalertFormSchemaToAlert = (alert: alertFormSchema): Alert => {
     const filters: Alert["filters"] = [
       alert.location ? { type: "location" as const, value: alert.location } : null,
       ...(alert.keywords ?? []).map(kw => ({ type: "keyword" as const, value: kw })),
@@ -55,7 +55,7 @@ export const useAlerts = () => {
 
   const createAlert = async (alert: Alert) => {
     try {
-      const newAlert = mapAlertToAlertSchema(alert, session?.user?.id ?? null);
+      const newAlert = mapAlertToalertFormSchema(alert, session?.user?.id ?? null);
 
       const { error } = await supabase
         .from('alerts')

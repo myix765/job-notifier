@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { signInSchema } from "./constants";
+import { signInFormSchema } from "./constants";
 import {
   Card,
   CardContent,
@@ -25,15 +25,15 @@ import { useAuth } from "@/hooks/useAuth";
 const Signin = () => {
   const { signIn } = useAuth();
 
-  const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<z.infer<typeof signInFormSchema>>({
+    resolver: zodResolver(signInFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const handleSignin = async (signInFormData: z.infer<typeof signInSchema>) => {
+  const handleSignin = async (signInFormData: z.infer<typeof signInFormSchema>) => {
     const { email, password } = signInFormData;
     await signIn(email, password);
   };

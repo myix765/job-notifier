@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { alertSchema } from "./constants";
+import { alertFormSchema } from "./constants";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -25,7 +25,7 @@ import { FILTER_TYPES } from "@/components/dashboardContainer/constants";
 
 interface AlertFormProps {
   initAlert: Alert;
-  onSubmit: (data: z.infer<typeof alertSchema>) => void;
+  onSubmit: (data: z.infer<typeof alertFormSchema>) => void;
   submitLabel?: string;
 }
 
@@ -34,8 +34,8 @@ const AlertForm = ({
   onSubmit,
   submitLabel = "Submit",
 }: AlertFormProps) => {
-  const form = useForm<z.infer<typeof alertSchema>>({
-    resolver: zodResolver(alertSchema),
+  const form = useForm<z.infer<typeof alertFormSchema>>({
+    resolver: zodResolver(alertFormSchema),
     defaultValues: {
       position: initAlert.position,
       alertFreq: initAlert.alertFreq,

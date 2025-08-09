@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { addPhoneSchema } from "./constants";
+import { addPhoneFormSchema } from "./constants";
 import {
   Card,
   CardContent,
@@ -23,14 +23,14 @@ import { Link } from "react-router";
 import { PRIVATE_ROUTES } from "@/routes/constants";
 
 const AddPhone = () => {
-  const form = useForm<z.infer<typeof addPhoneSchema>>({
-    resolver: zodResolver(addPhoneSchema),
+  const form = useForm<z.infer<typeof addPhoneFormSchema>>({
+    resolver: zodResolver(addPhoneFormSchema),
     defaultValues: {
       phone: "",
     },
   });
 
-  const handleAddPhone = async (formData: z.infer<typeof addPhoneSchema>) => {
+  const handleAddPhone = async (formData: z.infer<typeof addPhoneFormSchema>) => {
     console.log("Adding phone number:", formData);
   }
 
