@@ -25,14 +25,25 @@ import { Button } from "@/components/ui/button";
 import FilterBadge from "@/components/dashboardContainer/components/filterBadge";
 import EditAlertForm from "./components/forms/EditAlertForm";
 import type { Alert } from "@/components/dashboardContainer/types";
+import clsx from "clsx";
 
 const AlertRow = ({ alert }: { alert: Alert }) => {
+  const { position, filters, isActive } = alert;
+
   return (
-    <TableRow>
-      <TableCell>{alert.position}</TableCell>
+    <TableRow className={clsx({ 'bg-gray-200 *:text-gray-500 hover:bg-gray-200': !isActive })}>
+      <TableCell>{position}</TableCell>
       <TableCell className="inline-flex gap-2 flex-wrap">
-        {alert.filters.map((filter, i) =>
-          <FilterBadge key={i} filter={filter} />
+        {/* dynamically display alert filters */}
+        {Object.entries(filters).flatMap(([key, value]) =>
+          Array.isArray(value)
+            ? value.filter(v => v)
+              .map((v, i) =>
+                <FilterBadge key={`${key}-${i}`} filter={v} />
+              )
+            : value != null && value !== ""
+              ? <FilterBadge key={key} filter={String(value)} />
+              : []
         )}
       </TableCell>
       <TableCell>
@@ -43,7 +54,7 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit alert for {alert.position}</DialogTitle>
+                <DialogTitle>Edit alert for {position}</DialogTitle>
                 <DialogDescription className="mb-2">
                   Modify the position query and filters for this alert.
                 </DialogDescription>
@@ -51,7 +62,7 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
               </DialogHeader>
             </DialogContent>
           </Dialog>
-          <Button variant="outline">Deactivate</Button>
+          <Button variant="outline">{isActive ? "Deactivate" : "Activate"}</Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">Delete</Button>
@@ -60,7 +71,7 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm deletion</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete this alert for {alert.position}? This action cannot be undone.
+                  Are you sure you want to delete this alert for {position}? This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

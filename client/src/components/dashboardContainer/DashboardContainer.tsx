@@ -27,20 +27,35 @@ const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
   //   {
   //     id: 1,
   //     position: "Software Engineer",
-  //     alertFreq: 24,
-  //     filters: [{ type: "location", value: "United States" }, { type: "time posted", value: "Posted 24 hours ago" }]
+  //     filters: {
+  //       alertFreq: 24,
+  //       location: "United States",
+  //       keywords: null
+  //     },
+  //     isActive: true,
   //   },
   //   {
   //     id: 2,
   //     position: "Data Scientist",
-  //     alertFreq: 12,
-  //     filters: [{ type: "location", value: "Remote" }, { type: "time posted", value: "Posted 3 days ago" }]
+  //     filters: {
+  //       alertFreq: 12,
+  //       location: null,
+  //       keywords: null
+  //     },
+  //     isActive: false,
   //   },
   //   {
   //     id: 3,
   //     position: "Product Manager",
-  //     alertFreq: 6,
-  //     filters: [{ type: "location", value: "Canada" }, { type: "time posted", value: "Posted 1 week ago" }]
+  //     filters: {
+  //       alertFreq: 6,
+  //       location: null,
+  //       keywords: [
+  //         "Entry",
+  //         "Junior"
+  //       ]
+  //     },
+  //     isActive: true,
   //   },
   // ];
 
@@ -48,7 +63,7 @@ const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
     return alerts.filter(alert =>
       alert.position.toLowerCase().includes(query.toLowerCase())
     );
-  }, [query, alerts]);
+  }, [query]);
 
   return (
     <>

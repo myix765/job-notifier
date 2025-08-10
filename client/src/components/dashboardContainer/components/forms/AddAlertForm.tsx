@@ -11,10 +11,12 @@ const AddAlertForm = () => {
   const newAlert: Alert = {
     id: NaN,
     position: "",
-    alertFreq: 1,
-    filters: [
-      { type: "", value: "" },
-    ],
+    filters: {
+      alertFreq: 1,
+      location: "",
+      keywords: [],
+    },
+    isActive: true,
   }
 
   return (

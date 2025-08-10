@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { alertFormSchema } from "./constants";
+import { alertFormSchema, FILTER_CONFIG } from "./constants";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,17 +11,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { LucideTrash2 } from "lucide-react";
 import type { Alert } from "@/components/dashboardContainer/types";
-import { FILTER_TYPES } from "@/components/dashboardContainer/constants";
 
 interface AlertFormProps {
   initAlert: Alert;
@@ -38,39 +30,21 @@ const AlertForm = ({
     resolver: zodResolver(alertFormSchema),
     defaultValues: {
       position: initAlert.position,
-      alertFreq: initAlert.alertFreq,
       filters: initAlert.filters,
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="position"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Position</FormLabel>
+              <FormLabel>Position<span className="text-red-500">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="Position" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="alertFreq"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notification Frequency (in hours)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Number of hours"
-                  {...field}
-                />
+                <Input placeholder="ex: Software Engineer" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -79,77 +53,112 @@ const AlertForm = ({
         <FormField
           control={form.control}
           name="filters"
-          render={({ field }) => (
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <FormLabel>Filters</FormLabel>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => field.onChange([...field.value, { type: "", value: "" }])}
-                >
-                  Add Filter
-                </Button>
+          render={({ field }) => {
+            const filters = field.value || {};
+            const keys = Object.keys(FILTER_CONFIG) as (keyof typeof FILTER_CONFIG)[];
+
+            const updateFilter = (
+              key: keyof typeof FILTER_CONFIG,
+              value: string | number | string[] | number[]
+            ) => {
+              field.onChange({ ...filters, [key]: value });
+            };
+
+            const addKeyword = () => {
+              const currentKeywords = filters.keywords || [];
+              updateFilter("keywords", [...currentKeywords, ""]);
+            };
+
+            const removeKeyword = (index: number) => {
+              const currentKeywords = filters.keywords || [];
+              const updatedKeywords = currentKeywords.filter((_, i) => i !== index);
+              updateFilter("keywords", updatedKeywords);
+            };
+
+            return (
+              <div className="*:mb-4">
+                {keys.map((key) => {
+                  const config = FILTER_CONFIG[key];
+                  const value = filters[key];
+
+                  if (config.single) {
+                    // Single-value input
+                    return (
+                      <FormField
+                        key={key}
+                        control={form.control}
+                        name={`filters.${key}`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{config.label}</FormLabel>
+                            <FormControl>
+                              <Input
+                                type={config.type}
+                                placeholder={config.placeholder}
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => {
+                                  const newVal = config.type === "number" ? Number(e.target.value) : e.target.value;
+                                  field.onChange(newVal);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    );
+                  } else {
+                    // Multi-value input
+                    const keywords: string[] = Array.isArray(value) ? (value as string[]) : [];
+                    return (
+                      <FormField
+                        key={key}
+                        control={form.control}
+                        name="filters.keywords"
+                        render={({ field }) => (
+                          <FormItem className="mb-4">
+                            <div className="flex justify-between items-center mb-2">
+                              <FormLabel>{config.label}</FormLabel>
+                              <Button variant="secondary" type="button" size="sm" onClick={addKeyword}>
+                                Add Keyword
+                              </Button>
+                            </div>
+
+                            {keywords.map((_, idx) => (
+                              <div key={idx} className="flex gap-2 items-center mb-2">
+                                <FormControl>
+                                  <Input
+                                    value={field.value?.[idx] ?? ""}
+                                    placeholder="Keyword"
+                                    onChange={(e) => {
+                                      const updated = [...(field.value || [])];
+                                      updated[idx] = e.target.value;
+                                      field.onChange(updated);
+                                    }}
+                                  />
+                                </FormControl>
+                                <Button
+                                  type="button"
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => removeKeyword(idx)}
+                                >
+                                  <LucideTrash2 size={16} />
+                                </Button>
+                              </div>
+                            ))}
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    );
+                  }
+                })}
               </div>
-              {field.value.map((filter, idx) => (
-                <FormField
-                  key={idx}
-                  control={form.control}
-                  name={`filters.${idx}`}
-                  render={() => (
-                    <FormItem className="mb-2">
-                      <div key={idx} className="flex gap-2 items-center">
-                        <FormControl>
-                          <Select
-                            value={filter.type}
-                            onValueChange={(value) => {
-                              const updated = [...field.value];
-                              updated[idx].type = value;
-                              field.onChange(updated);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {FILTER_TYPES.map((type) => (
-                                <SelectItem key={type} value={type}>
-                                  {type}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormControl>
-                          <Input
-                            placeholder="Value"
-                            value={filter.value}
-                            onChange={e => {
-                              const updated = [...field.value];
-                              updated[idx].value = e.target.value;
-                              field.onChange(updated);
-                            }}
-                          />
-                        </FormControl>
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => {
-                            const updated = field.value.filter((_, i) => i !== idx);
-                            field.onChange(updated);
-                          }}
-                        >
-                          <LucideTrash2 size={16} />
-                        </Button>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
-          )}
+            );
+          }}
         />
         <div className="flex gap-2 mt-1">
           <Button type="submit">{submitLabel}</Button>

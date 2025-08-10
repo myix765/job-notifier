@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useToast } from '@/hooks/useToast';
 import type { Alert } from "@/components/dashboardContainer/types";
 
-interface alertFormSchema {
+interface dbAlertSchema {
   id: string | null;
   user_id: string | null;
   position: string;
@@ -14,48 +14,49 @@ interface alertFormSchema {
   created_at: string | null;
 }
 
-type NewalertFormSchema = Omit<alertFormSchema, "id" | "created_at">;
+type NewalertFormSchema = Omit<dbAlertSchema, "id" | "created_at">;
 
 export const useAlerts = () => {
   const { session } = useAuth();
   const { showErrorToast } = useToast();
 
-  const mapAlertToalertFormSchema = (alert: Alert, userId: string | null): NewalertFormSchema => {
-    const location = alert.filters.find(f => f.type === "location")?.value ?? null;
-    const keywords = alert.filters
-      .filter(
-        (f): f is { type: "keyword"; value: string } =>
-          f.type === "keyword" && f.value !== null
-      )
-      .map(f => f.value);
+  const modelMapper = {
+    uiToDbAlert: (
+      alert: Alert,
+      userId: string | null
+    ): NewalertFormSchema => {
+      const { position, filters } = alert;
+      const { location, keywords, alertFreq } = filters
 
-    return {
-      user_id: userId,
-      position: alert.position,
-      location,
-      keywords: keywords.length > 0 ? keywords : null,
-      alertFreq: alert.alertFreq,
-      is_active: true,
-    };
-  }
+      return {
+        user_id: userId,
+        position: position,
+        location: location ?? null,
+        keywords: keywords ?? null,
+        alertFreq: alertFreq,
+        is_active: true,
+      };
+    },
 
-  const mapalertFormSchemaToAlert = (alert: alertFormSchema): Alert => {
-    const filters: Alert["filters"] = [
-      alert.location ? { type: "location" as const, value: alert.location } : null,
-      ...(alert.keywords ?? []).map(kw => ({ type: "keyword" as const, value: kw })),
-    ].filter((f): f is NonNullable<typeof f> => f !== null);
+    dbToUiAlert: (alert: dbAlertSchema): Alert => {
+      const { id, position, is_active, alertFreq, location, keywords } = alert;
 
-    return {
-      id: Number(alert.id),
-      position: alert.position,
-      alertFreq: alert.alertFreq,
-      filters,
-    };
+      return {
+        id: Number(id),
+        position: position,
+        filters: {
+          alertFreq,
+          location,
+          keywords,
+        },
+        isActive: is_active
+      };
+    }
   }
 
   const createAlert = async (alert: Alert) => {
     try {
-      const newAlert = mapAlertToalertFormSchema(alert, session?.user?.id ?? null);
+      const newAlert = modelMapper.uiToDbAlert(alert, session?.user?.id ?? null);
 
       const { error } = await supabase
         .from('alerts')
@@ -75,6 +76,7 @@ export const useAlerts = () => {
   }
 
   return {
+    modelMapper,
     createAlert,
   };
 }
