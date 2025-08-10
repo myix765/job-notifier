@@ -1,15 +1,28 @@
 import { z } from "zod";
 import { alertFormSchema } from "./constants";
-import type { Alert } from "@/components/dashboardContainer/types";
+import type { Alert } from "@/components/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import AlertForm from "@/components/dashboardContainer/components/forms/AlertForm";
+import { Button } from "@/components/ui/button";
+import { useAlerts } from "@/hooks/useAlerts";
 
 const AddAlertForm = () => {
-  const onSubmit = (formData: z.infer<typeof alertFormSchema>) => {
+  const { createAlert } = useAlerts();
+
+  const onSubmit = async (formData: z.infer<typeof alertFormSchema>) => {
     console.log("Add alert", formData);
+    await createAlert(formData);
   }
 
   const newAlert: Alert = {
-    id: NaN,
+    id: "",
     position: "",
     filters: {
       alertFreq: 1,
@@ -20,11 +33,24 @@ const AddAlertForm = () => {
   }
 
   return (
-    <AlertForm
-      initAlert={newAlert}
-      onSubmit={onSubmit}
-      submitLabel="Create"
-    />
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>New</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add New Alert</DialogTitle>
+          <DialogDescription className="mb-2">
+            Create a new alert by specifying the position and filters.
+          </DialogDescription>
+          <AlertForm
+            initAlert={newAlert}
+            onSubmit={onSubmit}
+            submitLabel="Create"
+          />
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   )
 }
 

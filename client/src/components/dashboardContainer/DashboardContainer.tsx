@@ -1,5 +1,4 @@
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -7,22 +6,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import Search from "@/components/ui/search";
 import AddAlertForm from "./components/forms/AddAlertForm";
 import AlertRow from "@/components/dashboardContainer/AlertRow";
-import type { DashboardContainerProps } from "./types";
+import type { Alert } from "../types";
+import { useAlerts } from "@/hooks/useAlerts";
 
-const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
+const DashboardContainer = () => {
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const [query, setQuery] = useState("");
+  const { getUsersAlerts } = useAlerts();
 
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      const res = await getUsersAlerts();
+      console.log(res);
+      setAlerts(res.data ?? []);
+    }
+
+    fetchAlerts();
+  }, [getUsersAlerts])
+  
   // const fakeAlerts = [
   //   {
   //     id: 1,
@@ -63,7 +67,7 @@ const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
     return alerts.filter(alert =>
       alert.position.toLowerCase().includes(query.toLowerCase())
     );
-  }, [query]);
+  }, [query, alerts]);
 
   return (
     <>
@@ -74,20 +78,7 @@ const DashboardContainer = ({ alerts = [] }: DashboardContainerProps) => {
             placeholder="Search alerts..."
             onSearch={(value) => setQuery(value)}
           />
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>New</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add New Alert</DialogTitle>
-                <DialogDescription className="mb-2">
-                  Create a new alert by specifying the position and filters.
-                </DialogDescription>
-                <AddAlertForm />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <AddAlertForm />
         </div>
         <Table>
           <TableHeader>

@@ -3,14 +3,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -24,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import FilterBadge from "@/components/dashboardContainer/components/filterBadge";
 import EditAlertForm from "./components/forms/EditAlertForm";
-import type { Alert } from "@/components/dashboardContainer/types";
+import type { Alert } from "@/components/types";
 import clsx from "clsx";
 
 const AlertRow = ({ alert }: { alert: Alert }) => {
@@ -48,20 +40,7 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
       </TableCell>
       <TableCell>
         <div className="flex gap-2 justify-end">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="secondary">Edit</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Edit alert for {position}</DialogTitle>
-                <DialogDescription className="mb-2">
-                  Modify the position query and filters for this alert.
-                </DialogDescription>
-                <EditAlertForm alert={alert} />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <EditAlertForm alert={alert} />
           <Button variant="outline">{isActive ? "Deactivate" : "Activate"}</Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>

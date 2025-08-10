@@ -1,5 +1,5 @@
 export interface Alert {
-  id: number;
+  id: string;
   position: string;
   filters: {
     alertFreq: number;
@@ -7,8 +7,4 @@ export interface Alert {
     keywords: string[] | null;
   };
   isActive: boolean;
-}
-
-export interface DashboardContainerProps {
-  alerts: Alert[];
 }

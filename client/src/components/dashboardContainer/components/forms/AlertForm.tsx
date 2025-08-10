@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { LucideTrash2 } from "lucide-react";
-import type { Alert } from "@/components/dashboardContainer/types";
+import type { Alert } from "@/components/types";
 
 interface AlertFormProps {
   initAlert: Alert;

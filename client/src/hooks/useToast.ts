@@ -1,7 +1,8 @@
+import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 export const useToast = () => {
-  const showErrorToast = (message: string, description?: string) => {
+  const showErrorToast = useCallback((message: string, description?: string) => {
     toast.error(message, {
       description,
       action: {
@@ -9,9 +10,9 @@ export const useToast = () => {
         onClick: () => { },
       },
     });
-  };
+  }, []);
 
-  const showSuccessToast = (message: string, description?: string) => {
+  const showSuccessToast = useCallback((message: string, description?: string) => {
     toast.success(message, {
       description,
       action: {
@@ -19,7 +20,7 @@ export const useToast = () => {
         onClick: () => { },
       },
     });
-  };
+  }, []);
 
   return { showErrorToast, showSuccessToast };
 };
