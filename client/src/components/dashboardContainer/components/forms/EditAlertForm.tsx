@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { z } from "zod";
 import { alertFormSchema } from "./constants";
 import type { Alert } from "@/components/types";
@@ -11,18 +12,30 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useAlerts } from "@/hooks/useAlerts";
 
 interface EditAlertFormProps {
   alert: Alert;
 }
 
 const EditAlertForm = ({ alert }: EditAlertFormProps) => {
-  const onSubmit = (formData: z.infer<typeof alertFormSchema>) => {
+  const [open, setOpen] = useState(false);
+  const { editAlert } = useAlerts();
+
+  const onSubmit = async (formData: z.infer<typeof alertFormSchema>) => {
     console.log("Form submitted:", formData);
+    const edits = {
+      ...alert,
+      ...formData,
+    }
+    console.log("edits:", edits);
+    const { data } = await editAlert(edits);
+    console.log(data);
+    setOpen(false);
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="secondary">Edit</Button>
       </DialogTrigger>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { z } from "zod";
 import { alertFormSchema } from "./constants";
 import type { Alert } from "@/components/types";
@@ -14,11 +15,13 @@ import { Button } from "@/components/ui/button";
 import { useAlerts } from "@/hooks/useAlerts";
 
 const AddAlertForm = () => {
+  const [open, setOpen] = useState(false);
   const { createAlert } = useAlerts();
 
   const onSubmit = async (formData: z.infer<typeof alertFormSchema>) => {
     console.log("Add alert", formData);
     await createAlert(formData);
+    setOpen(false);
   }
 
   const newAlert: Alert = {
@@ -30,10 +33,11 @@ const AddAlertForm = () => {
       keywords: [],
     },
     isActive: true,
+    createdAt: null,
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>New</Button>
       </DialogTrigger>

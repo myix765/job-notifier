@@ -3,8 +3,9 @@ import { supabase } from "@/lib/supabaseClient"
 import { useAuth } from "@/hooks/useAuth"
 import { useToast } from '@/hooks/useToast';
 import type { Alert } from "@/components/types";
+import type { PartialBy } from "@/utils/types";
 
-interface dbAlertSchema {
+interface DbAlertSchema {
   id: string | null;
   user_id: string | null;
   position: string;
@@ -15,8 +16,7 @@ interface dbAlertSchema {
   created_at: string | null;
 }
 
-type NewDbAlertSchema = Omit<dbAlertSchema, "id" | "created_at">;
-type NewAlert = Omit<Alert, "id" | "isActive">;
+type UiAlert = PartialBy<Alert, "id" | "isActive" | "createdAt">;
 
 export const useAlerts = () => {
   const { session } = useAuth();
@@ -24,24 +24,34 @@ export const useAlerts = () => {
 
   const modelMapper = useMemo(() => ({
     uiToDbAlert: (
-      alert: NewAlert,
+      alert: UiAlert,
       userId: string | null
-    ): NewDbAlertSchema => {
+    ): DbAlertSchema => {
       const { position, filters } = alert;
       const { location, keywords, alertFreq } = filters
 
       return {
+        id: alert.id ?? null,
         user_id: userId,
         position: position,
         location: location ?? null,
         keywords: keywords ?? null,
         alert_freq: alertFreq,
         is_active: true,
+        created_at: alert.createdAt ?? null,
       };
     },
 
-    dbToUiAlert: (alert: dbAlertSchema): Alert => {
-      const { id, position, is_active, alert_freq, location, keywords } = alert;
+    dbToUiAlert: (alert: DbAlertSchema): Alert => {
+      const {
+        id,
+        position,
+        is_active,
+        created_at,
+        alert_freq,
+        location,
+        keywords
+      } = alert;
 
       if (!id) {
         throw new Error("Missing alert ID");
@@ -55,18 +65,19 @@ export const useAlerts = () => {
           location,
           keywords,
         },
-        isActive: is_active
+        isActive: is_active,
+        createdAt: created_at,
       };
     }
   }), []);
 
-  const createAlert = async (alert: NewAlert) => {
+  const createAlert = async (alert: UiAlert) => {
     try {
       const newAlert = modelMapper.uiToDbAlert(alert, session?.user?.id ?? null);
 
       const { error } = await supabase
         .from('alerts')
-        .insert(newAlert)
+        .insert(newAlert);
 
       if (error) {
         showErrorToast("Error creating an alert", error.message);
@@ -89,7 +100,7 @@ export const useAlerts = () => {
       const res = await supabase
         .from('alerts')
         .select('*')
-        .eq('user_id', user?.id)
+        .eq('user_id', user?.id);
 
       if (res.error) {
         showErrorToast("Error creating an alert", res.error.message);
@@ -105,9 +116,51 @@ export const useAlerts = () => {
     }
   }, [modelMapper, session?.user, showErrorToast])
 
+  const editAlert = async (edits: Alert) => {
+    try {
+      const updatedAlert = modelMapper.uiToDbAlert(edits, session?.user?.id ?? null);
+
+      const { data, error } = await supabase
+        .from('alerts')
+        .update(updatedAlert)
+        .eq('id', edits.id)
+        .select();
+
+      if (error) {
+        showErrorToast("Error creating an alert", error.message);
+        return { success: false, error };
+      }
+
+      return { success: false, data };
+    } catch (err) {
+      console.error("Unexpected error when editing alert:", err);
+      showErrorToast("Unexpected error when editing alert");
+      return { success: false, error: null };
+    }
+  }
+
+  const deleteAlert = async (id: string) => {
+    try {
+      const res = await supabase
+        .from('alerts')
+        .delete()
+        .eq('id', id);
+
+      console.log(res);
+
+      return res;
+    } catch (err) {
+      console.error("Unexpected error when deleting alerts:", err);
+      showErrorToast("Unexpected error when deleting alerts");
+      return { success: false, error: null };
+    }
+  }
+
   return {
     modelMapper,
     createAlert,
     getUsersAlerts,
+    editAlert,
+    deleteAlert,
   };
 }

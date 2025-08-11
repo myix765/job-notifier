@@ -18,9 +18,11 @@ import FilterBadge from "@/components/dashboardContainer/components/filterBadge"
 import EditAlertForm from "./components/forms/EditAlertForm";
 import type { Alert } from "@/components/types";
 import clsx from "clsx";
+import { useAlerts } from "@/hooks/useAlerts";
 
 const AlertRow = ({ alert }: { alert: Alert }) => {
   const { position, filters, isActive } = alert;
+  const { deleteAlert } = useAlerts();
 
   return (
     <TableRow className={clsx({ 'bg-gray-200 *:text-gray-500 hover:bg-gray-200': !isActive })}>
@@ -55,7 +57,7 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Confirm</AlertDialogAction>
+                <AlertDialogAction onClick={() => deleteAlert(alert.id)}>Confirm</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

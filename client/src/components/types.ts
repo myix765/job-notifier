@@ -7,4 +7,5 @@ export interface Alert {
     keywords: string[] | null;
   };
   isActive: boolean;
+  createdAt: string | null;
 }
