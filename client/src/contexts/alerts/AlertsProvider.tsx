@@ -96,7 +96,7 @@ export function AlertsProvider({ children }: { children: React.ReactNode }) {
 
       const uiAlert = modelMapper.dbToUiAlert(data);
       addAlert(uiAlert);
-      return { success: false, data };
+      return { success: true, data };
     } catch (err) {
       console.error("Unexpected error when creating an alert:", err);
       showErrorToast("Unexpected error when creating an alert");
@@ -147,7 +147,7 @@ export function AlertsProvider({ children }: { children: React.ReactNode }) {
 
       const uiAlert = modelMapper.dbToUiAlert(data);
       editAlertState(uiAlert);
-      return { success: false, data };
+      return { success: true, data };
     } catch (err) {
       console.error("Unexpected error when editing alert:", err);
       showErrorToast("Unexpected error when editing alert");
@@ -170,10 +170,34 @@ export function AlertsProvider({ children }: { children: React.ReactNode }) {
       }
 
       removeAlert(data.id);
-      return { success: false, data };
+      return { success: true, data };
     } catch (err) {
       console.error("Unexpected error when deleting alerts:", err);
       showErrorToast("Unexpected error when deleting alerts");
+      return { success: false, error: null };
+    }
+  }
+
+  const editActivateState = async (alert: Alert) => {
+    try {
+      const { data, error } = await supabase
+        .from('alerts')
+        .update({ is_active: !alert.isActive })
+        .eq('id', alert.id)
+        .select()
+        .single();
+
+      if (error) {
+        showErrorToast(`Error ${alert.isActive ? "deactivating" : "activating"} alert`, error.message);
+        return { success: false, error };
+      }
+
+      const uiAlert = modelMapper.dbToUiAlert(data);
+      editAlertState(uiAlert);
+      return { success: true, data };
+    } catch (err) {
+      console.error(`Unexpected error when ${alert.isActive ? "deactivating" : "activating"} alert`, err);
+      showErrorToast(`Unexpected error when ${alert.isActive ? "deactivating" : "activating"} alert`);
       return { success: false, error: null };
     }
   }
@@ -197,6 +221,7 @@ export function AlertsProvider({ children }: { children: React.ReactNode }) {
         getUsersAlerts,
         editAlert,
         deleteAlert,
+        editActivateState,
       }}>
       {children}
     </AlertsContext.Provider>

@@ -22,7 +22,7 @@ import { useAlerts } from "@/hooks/useAlerts";
 
 const AlertRow = ({ alert }: { alert: Alert }) => {
   const { position, filters, isActive } = alert;
-  const { deleteAlert } = useAlerts();
+  const { deleteAlert, editActivateState } = useAlerts();
 
   return (
     <TableRow className={clsx({ 'bg-gray-200 *:text-gray-500 hover:bg-gray-200': !isActive })}>
@@ -43,7 +43,12 @@ const AlertRow = ({ alert }: { alert: Alert }) => {
       <TableCell>
         <div className="flex gap-2 justify-end">
           <EditAlertForm alert={alert} />
-          <Button variant="outline">{isActive ? "Deactivate" : "Activate"}</Button>
+          <Button
+            variant="outline"
+            onClick={() => editActivateState(alert)}
+          >
+            {isActive ? "Deactivate" : "Activate"}
+          </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">Delete</Button>

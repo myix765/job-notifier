@@ -18,5 +18,7 @@ export interface AlertsContextType {
   editAlert: (alert: Alert) =>
     Promise<{ success: boolean; data?: DbAlert; error?: PostgrestError | null }>;
   deleteAlert: (id: string) =>
-    Promise<{ success: boolean; data?: DbAlert; error?: PostgrestError | null}>;
+    Promise<{ success: boolean; data?: DbAlert; error?: PostgrestError | null }>;
+  editActivateState: (alert: Alert) =>
+    Promise<{ success: boolean; data?: DbAlert; error?: PostgrestError | null }>
 }
