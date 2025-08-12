@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AuthContext } from '@/contexts/AuthContext/AuthContext';
+import { AuthContext } from '@/contexts/auth/AuthContext';
 import type { Session } from '@supabase/supabase-js';
 import type { AuthProviderProps } from './types';
 import { useNavigate, useLocation } from 'react-router';
@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const getSession = async () => {
       const { data } = await supabase.auth.getSession();
-      console.log("session:", data.session);
       setSession(data?.session ?? null);
       setLoading(false);
     };

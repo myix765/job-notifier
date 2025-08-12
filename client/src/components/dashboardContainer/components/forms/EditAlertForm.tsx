@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { z } from "zod";
 import { alertFormSchema } from "./constants";
-import type { Alert } from "@/components/types";
+import type { Alert } from "@/types/alert";
 import AlertForm from "@/components/dashboardContainer/components/forms/AlertForm";
 import {
   Dialog,
@@ -23,14 +23,11 @@ const EditAlertForm = ({ alert }: EditAlertFormProps) => {
   const { editAlert } = useAlerts();
 
   const onSubmit = async (formData: z.infer<typeof alertFormSchema>) => {
-    console.log("Form submitted:", formData);
     const edits = {
       ...alert,
       ...formData,
     }
-    console.log("edits:", edits);
-    const { data } = await editAlert(edits);
-    console.log(data);
+    await editAlert(edits);
     setOpen(false);
   }
 

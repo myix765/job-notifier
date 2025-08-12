@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import FilterBadge from "@/components/dashboardContainer/components/filterBadge";
 import EditAlertForm from "./components/forms/EditAlertForm";
-import type { Alert } from "@/components/types";
+import type { Alert } from "@/types/alert";
 import clsx from "clsx";
 import { useAlerts } from "@/hooks/useAlerts";
 

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { LucideTrash2 } from "lucide-react";
-import type { Alert } from "@/components/types";
+import type { Alert } from "@/types/alert";
 
 interface AlertFormProps {
   initAlert: Alert;
@@ -50,6 +50,7 @@ const AlertForm = ({
             </FormItem>
           )}
         />
+        {/* dynamically render filters */}
         <FormField
           control={form.control}
           name="filters"

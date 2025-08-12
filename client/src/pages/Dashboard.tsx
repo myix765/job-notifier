@@ -1,32 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "@/contexts/AuthContext/AuthContext";
 import DashboardContainer from "@/components/dashboardContainer/DashboardContainer";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
-  // const [alerts, setAlerts] = useState<Alert[]>([]);
-  const { signOut } = useContext(AuthContext);
-
-  // useEffect(() => {
-  //   const fetchAlerts = async () => {
-  //     const user = session?.user;
-  //     if (!user) return;
-
-  //     const res = await supabase
-  //       .from('alerts')
-  //       .select('*')
-  //       .eq('user_id', user?.id)
-
-  //     if (res.error) {
-  //       console.error("Error fetching alerts:", res.error);
-  //       return;
-  //     }
-  //     setAlerts(res.data);
-  //   }
-
-  //   fetchAlerts();
-  //   console.log("Fetched alerts:", alerts);
-  // }, [session])
+  const { signOut } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -42,7 +19,7 @@ const Dashboard = () => {
           </div>
           <Button onClick={handleSignOut}>Logout</Button>
         </div>
-        <DashboardContainer alerts={[]} />
+        <DashboardContainer />
       </div>
     </>
   )

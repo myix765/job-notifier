@@ -16,7 +16,6 @@ const ConfirmEmail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state;
-  console.log(email)
 
   useEffect(() => {
     if (!email) {
